@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #f6f7fb;
+  font-family: 'Manrope', sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.portal-customer {
+  min-height: 100vh;
+  background: #f7f1e8;
+  color: #1b1b1b;
+  font-family: 'Manrope', sans-serif;
+}
+
+.portal-customer h1,
+.portal-customer h2,
+.portal-customer h3,
+.portal-customer h4,
+.portal-customer .portal-title {
+  font-family: 'Playfair Display', serif;
+}
+
+.portal-admin {
+  min-height: 100vh;
+  background: #f6f7fb;
+  color: #0b1220;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.portal-admin h1,
+.portal-admin h2,
+.portal-admin h3,
+.portal-admin h4,
+.portal-admin .portal-title {
+  font-family: 'Sora', sans-serif;
+}

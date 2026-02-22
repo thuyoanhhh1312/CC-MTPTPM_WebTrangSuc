@@ -6,48 +6,40 @@ class User extends Model {}
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
+    name: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
     email: {
-      type: DataTypes.STRING(191),
+      type: DataTypes.STRING(255),
       allowNull: false,
       unique: true,
     },
     password_hash: {
       type: DataTypes.STRING(255),
       allowNull: false,
+      field: "password",
     },
     role_id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 2,
     },
-    status: {
-      type: DataTypes.ENUM("active", "locked", "pending"),
-      allowNull: false,
-      defaultValue: "active",
-    },
-    last_login_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    password_changed_at: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    deleted_at: {
-      type: DataTypes.DATE,
+    refresh_token: {
+      type: DataTypes.TEXT,
       allowNull: true,
     },
   },
   {
     sequelize,
     modelName: "User",
-    tableName: "users",
+    tableName: "user",
     underscored: true,
     timestamps: true,
-    paranoid: true,
   }
 );
 

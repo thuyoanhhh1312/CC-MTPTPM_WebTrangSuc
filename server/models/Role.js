@@ -6,18 +6,14 @@ class Role extends Model {}
 Role.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
-    code: {
-      type: DataTypes.STRING(50),
+    name: {
+      type: DataTypes.STRING(255),
       allowNull: false,
       unique: true,
-    },
-    name: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
     },
     description: {
       type: DataTypes.TEXT,
@@ -27,7 +23,7 @@ Role.init(
   {
     sequelize,
     modelName: "Role",
-    tableName: "roles",
+    tableName: "role",
     underscored: true,
     timestamps: true,
   }
