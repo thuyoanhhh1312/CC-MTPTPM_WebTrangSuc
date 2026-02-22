@@ -1,31 +1,37 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../config/db.js";
 
-class CustomerProfile extends Model {}
+class Customer extends Model {}
 
-CustomerProfile.init(
+Customer.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+      field: "customer_id",
     },
     user_id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,
     },
     name: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
+    email: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+      unique: true,
+    },
     phone: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(50),
       allowNull: false,
       unique: true,
     },
     gender: {
-      type: DataTypes.ENUM("male", "female", "other"),
+      type: DataTypes.STRING(10),
       allowNull: true,
     },
     address: {
@@ -44,16 +50,11 @@ CustomerProfile.init(
   },
   {
     sequelize,
-    modelName: "CustomerProfile",
-    tableName: "customer_profiles",
+    modelName: "Customer",
+    tableName: "customer",
     underscored: true,
     timestamps: true,
-    indexes: [
-      { fields: ["user_id"], unique: true, name: "uniq_customer_profile_user" },
-      { fields: ["birthday"], name: "idx_customer_profile_birthday" },
-      { fields: ["segment_type"], name: "idx_customer_profile_segment" },
-    ],
   }
 );
 
-export default CustomerProfile;
+export default Customer;
