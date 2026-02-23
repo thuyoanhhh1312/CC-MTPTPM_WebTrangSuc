@@ -33,7 +33,7 @@ const PromotionsPage = () => {
       <Row gutter={[16, 16]}>
         {promotions.map((promotion) => (
           <Col key={promotion.id} xs={24} md={12} xl={8}>
-            <Badge.Ribbon text="Active" color="gold">
+            <Badge.Ribbon text="Active" color="#B08A4A">
               <Card
                 title={promotion.title}
                 extra={

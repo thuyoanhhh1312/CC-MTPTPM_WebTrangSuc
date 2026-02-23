@@ -10,7 +10,7 @@ const rows = [
 const statusColor = {
   published: 'green',
   draft: 'default',
-  review: 'gold',
+  review: '#B08A4A',
 };
 
 const columns = [

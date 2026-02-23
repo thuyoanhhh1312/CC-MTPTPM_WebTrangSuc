@@ -9,8 +9,8 @@ const rows = [
 
 const colorMap = {
   paid: 'green',
-  processing: 'gold',
-  pending: 'orange',
+  processing: '#B08A4A',
+  pending: '#B08A4A',
 };
 
 const columns = [

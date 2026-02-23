@@ -26,7 +26,7 @@ const GoldPricePage = () => {
       title: 'Trend',
       key: 'trend',
       render: (_, row) => {
-        const color = row.trend === 'up' ? 'green' : row.trend === 'down' ? 'red' : 'gold';
+        const color = row.trend === 'up' ? 'green' : row.trend === 'down' ? 'red' : '#B08A4A';
         return <Tag color={color}>{row.trend.toUpperCase()}</Tag>;
       },
     },

@@ -19,27 +19,28 @@ const { Text, Title } = Typography;
 
 const customerTheme = {
   token: {
-    colorPrimary: '#0F2A24',
-    colorInfo: '#0F2A24',
-    colorLink: '#0F2A24',
-    colorText: '#1B1B1B',
-    colorBgLayout: '#F7F1E8',
+    colorPrimary: '#12332B',
+    colorInfo: '#12332B',
+    colorLink: '#12332B',
+    colorText: '#1A1D21',
+    colorBgLayout: '#F5F6F7',
     colorBgContainer: '#FFFFFF',
+    colorBorder: '#E6E8EC',
     borderRadius: 12,
     fontFamily: 'Manrope, sans-serif',
   },
   components: {
     Menu: {
-      itemColor: '#1B1B1B',
-      itemSelectedColor: '#C9A24E',
-      horizontalItemSelectedColor: '#C9A24E',
+      itemColor: '#1A1D21',
+      itemSelectedColor: '#B08A4A',
+      horizontalItemSelectedColor: '#B08A4A',
       activeBarBorderWidth: 2,
-      itemBg: '#F7F1E8',
+      itemBg: '#F5F6F7',
     },
     Layout: {
-      headerBg: '#F7F1E8',
-      bodyBg: '#F7F1E8',
-      footerBg: '#0F2A24',
+      headerBg: '#F5F6F7',
+      bodyBg: '#F5F6F7',
+      footerBg: '#12332B',
     },
   },
 };
@@ -86,14 +87,14 @@ const CustomerLayout = () => {
   return (
     <ConfigProvider theme={customerTheme}>
       <Layout className="portal-customer">
-        <Header style={{ borderBottom: '1px solid rgba(15, 42, 36, 0.12)', height: 74, lineHeight: '74px' }}>
+        <Header style={{ borderBottom: '1px solid var(--color-border)', height: 74, lineHeight: '74px' }}>
           <div className="mx-auto flex h-full w-full max-w-[1600px] items-center justify-between gap-4 px-4 md:px-6 desktop:px-8">
             <button
               className="flex items-center gap-2 border-0 bg-transparent p-0 text-left"
               onClick={() => navigate('/')}
               type="button"
             >
-              <Gem size={20} color="#C9A24E" />
+              <Gem size={20} color="#B08A4A" />
               <div className="leading-tight">
                 <Title className="portal-title" level={4} style={{ margin: 0 }}>
                   Aurelia Jewels
@@ -193,11 +194,11 @@ const CustomerLayout = () => {
         </Content>
 
         <Footer style={{ padding: 32 }}>
-          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 text-[#F7F1E8] md:flex-row md:items-center md:justify-between">
-            <Text style={{ color: '#F7F1E8' }}>
+          <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 text-[#F5F6F7] md:flex-row md:items-center md:justify-between">
+            <Text style={{ color: '#F5F6F7' }}>
               Aurelia Jewels Commerce Skeleton - Customer Portal
             </Text>
-            <Text style={{ color: '#C9A24E' }}>
+            <Text style={{ color: '#B08A4A' }}>
               Premium experiences with secure checkout flows
             </Text>
           </div>

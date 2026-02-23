@@ -20,8 +20,8 @@ const recentOrders = [
 
 const statusColor = {
   paid: 'green',
-  processing: 'gold',
-  pending: 'orange',
+  processing: '#B08A4A',
+  pending: '#B08A4A',
 };
 
 const DashboardPage = () => {

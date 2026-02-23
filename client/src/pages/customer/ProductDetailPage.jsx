@@ -79,7 +79,7 @@ const ProductDetailPage = () => {
 
         <Card className="col-span-4 md:col-span-8 desktop:col-span-5" title="Purchase Panel">
           <Space direction="vertical" size={14} style={{ width: '100%' }}>
-            <Tag color="gold">Limited Edition</Tag>
+            <Tag color="#B08A4A">Limited Edition</Tag>
             <Title level={3} className="portal-title" style={{ margin: 0 }}>
               $4,850
             </Title>

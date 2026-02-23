@@ -9,8 +9,8 @@ const rows = [
 
 const tierColor = {
   silver: 'default',
-  gold: 'gold',
-  platinum: 'cyan',
+  gold: '#B08A4A',
+  platinum: '#12332B',
 };
 
 const columns = [

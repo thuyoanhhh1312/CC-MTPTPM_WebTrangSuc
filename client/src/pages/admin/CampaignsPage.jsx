@@ -10,7 +10,7 @@ const rows = [
 const statusColor = {
   running: 'green',
   planned: 'blue',
-  paused: 'gold',
+  paused: '#B08A4A',
 };
 
 const columns = [

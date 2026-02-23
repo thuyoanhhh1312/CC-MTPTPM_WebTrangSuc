@@ -50,7 +50,7 @@ const CategoryPage = () => {
             <Col key={product.id} xs={24} md={12} xl={8}>
               <Card
                 title={product.name}
-                extra={<Tag color="gold">{product.badge}</Tag>}
+                extra={<Tag color="#B08A4A">{product.badge}</Tag>}
                 actions={[
                   <Button key={product.id} type="link" onClick={() => navigate(`/product/${product.slug}`)}>
                     View Product

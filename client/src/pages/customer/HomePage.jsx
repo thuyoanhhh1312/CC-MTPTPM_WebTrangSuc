@@ -51,7 +51,7 @@ const HomePage = () => {
       <div className="grid grid-cols-4 gap-4 md:grid-cols-8 desktop:grid-cols-12">
         <Card className="col-span-4 md:col-span-8 desktop:col-span-8" bordered={false}>
           <Space direction="vertical" size={12}>
-            <Tag icon={<Sparkles size={13} />} color="gold">
+            <Tag icon={<Sparkles size={13} />} color="#B08A4A">
               Seasonal editorial launch
             </Tag>
             <Title level={3} className="portal-title" style={{ margin: 0 }}>

@@ -40,7 +40,7 @@ const NewsListPage = () => {
           renderItem={(item) => (
             <List.Item
               key={item.id}
-              extra={<Tag color="cyan">{item.category}</Tag>}
+              extra={<Tag color="#12332B">{item.category}</Tag>}
               actions={[
                 <Button key={item.id} type="link" onClick={() => navigate(`/news/${item.slug}`)}>
                   Read article
