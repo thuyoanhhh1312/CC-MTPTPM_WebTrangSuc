@@ -11,7 +11,7 @@ const columns = [
   { title: 'Promotion', dataIndex: 'name', key: 'name' },
   { title: 'Type', dataIndex: 'type', key: 'type' },
   { title: 'Start Date', dataIndex: 'startDate', key: 'startDate' },
-  { title: 'Status', key: 'status', render: (_, row) => <Tag color="cyan">{row.status}</Tag> },
+  { title: 'Status', key: 'status', render: (_, row) => <Tag color="#12332B">{row.status}</Tag> },
 ];
 
 const PromotionsAdminPage = () => {

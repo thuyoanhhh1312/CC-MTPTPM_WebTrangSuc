@@ -22,27 +22,28 @@ const { Text, Title } = Typography;
 
 const adminTheme = {
   token: {
-    colorPrimary: '#0FB5B5',
-    colorInfo: '#0FB5B5',
-    colorWarning: '#F4B740',
-    colorText: '#0B1220',
-    colorBgLayout: '#F6F7FB',
+    colorPrimary: '#12332B',
+    colorInfo: '#12332B',
+    colorWarning: '#B08A4A',
+    colorText: '#1A1D21',
+    colorBgLayout: '#F5F6F7',
     colorBgContainer: '#FFFFFF',
+    colorBorder: '#E6E8EC',
     borderRadius: 12,
     fontFamily: 'IBM Plex Sans, sans-serif',
   },
   components: {
     Layout: {
-      siderBg: '#0B1220',
+      siderBg: '#12332B',
       headerBg: '#FFFFFF',
-      bodyBg: '#F6F7FB',
+      bodyBg: '#F5F6F7',
     },
     Menu: {
-      darkItemBg: '#0B1220',
-      darkSubMenuItemBg: '#111A2E',
-      darkItemSelectedBg: '#0FB5B5',
-      darkItemSelectedColor: '#0B1220',
-      darkItemColor: '#D9E2F1',
+      darkItemBg: '#12332B',
+      darkSubMenuItemBg: '#0F2B24',
+      darkItemSelectedBg: '#B08A4A',
+      darkItemSelectedColor: '#1A1D21',
+      darkItemColor: '#F5F6F7',
       darkItemHoverColor: '#FFFFFF',
     },
   },
@@ -114,13 +115,13 @@ const AdminLayout = () => {
             collapsed={collapsed}
             onCollapse={setCollapsed}
             width={260}
-            style={{ borderRight: '1px solid rgba(255, 255, 255, 0.08)' }}
+            style={{ borderRight: '1px solid rgba(230, 232, 236, 0.16)' }}
           >
             <div className="flex h-16 items-center justify-center border-b border-white/10 px-3">
               <Title
                 level={5}
                 className="portal-title"
-                style={{ margin: 0, color: '#D9E2F1', textAlign: 'center' }}
+                style={{ margin: 0, color: '#F5F6F7', textAlign: 'center' }}
               >
                 {collapsed ? 'AJS' : 'Aurelia Admin'}
               </Title>
@@ -130,7 +131,7 @@ const AdminLayout = () => {
         )}
 
         <Layout>
-          <Header style={{ borderBottom: '1px solid rgba(11, 18, 32, 0.08)', padding: '0 16px' }}>
+          <Header style={{ borderBottom: '1px solid var(--color-border)', padding: '0 16px' }}>
             <div className="flex h-full items-center justify-between gap-3">
               <Space>
                 {!isDesktop && (
@@ -145,7 +146,7 @@ const AdminLayout = () => {
               </Space>
 
               <Space>
-                <Tag color="cyan" style={{ textTransform: 'uppercase', margin: 0 }}>
+                <Tag color="#B08A4A" style={{ textTransform: 'uppercase', margin: 0 }}>
                   {roleTag}
                 </Tag>
                 <Dropdown menu={{ items: userItems }} trigger={['click']}>

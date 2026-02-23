@@ -22,7 +22,7 @@ const NewsDetailPage = () => {
       ]}
     >
       <Card>
-        <Tag color="cyan">Editorial</Tag>
+        <Tag color="#12332B">Editorial</Tag>
         <Title level={3} className="portal-title">
           {articleTitle}
         </Title>

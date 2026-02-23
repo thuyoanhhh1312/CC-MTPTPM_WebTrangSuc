@@ -8,7 +8,7 @@ const rows = [
 ];
 
 const statusColor = {
-  pending: 'gold',
+  pending: '#B08A4A',
   flagged: 'red',
   approved: 'green',
 };
