@@ -1,8 +1,9 @@
 import jwt from "jsonwebtoken";
 import { ERROR_CODES } from "../utils/errorCodes.js";
 import { APP_CONSTANTS } from "../config/constants.js";
+import db from "../models/index.js";
 
-export const authenticateToken = (req, res, next) => {
+export const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader?.startsWith("Bearer ")) {
     return next({
@@ -13,6 +14,20 @@ export const authenticateToken = (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
+  try {
+    const blacklisted = await db.BlacklistedToken.findOne({
+      where: { token },
+    });
+    if (blacklisted) {
+      return next({
+        statusCode: 401,
+        code: ERROR_CODES.TOKEN_REVOKED,
+        message: "Token đã bị thu hồi. Vui lòng đăng nhập lại.",
+      });
+    }
+  } catch (err) {
+    console.error("Lỗi kiểm tra token bị thu hồi:", err);
+  }
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, (err, payload) => {
     if (err) {

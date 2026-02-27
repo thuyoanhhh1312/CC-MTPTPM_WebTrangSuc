@@ -35,11 +35,11 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Methods",
-    "GET,POST,PUT,DELETE,PATCH,OPTIONS"
+    "GET,POST,PUT,DELETE,PATCH,OPTIONS",
   );
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, authtoken"
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, authtoken",
   );
 
   if (req.method === "OPTIONS") {
@@ -64,7 +64,21 @@ app.listen(port, async () => {
 
   await verifyDbConnection();
 
-  console.log("✅ Server ready");
+  try {
+    const db = (await import("./models/index.js")).default;
+    if (db.BlacklistedToken) {
+      await db.BlacklistedToken.sync();
+      console.log("BlacklistedToken table synced");
+
+      // Start token cleanup scheduler
+      const { scheduleTokenCleanup } = await import("./utils/tokenCleanup.js");
+      scheduleTokenCleanup();
+    }
+  } catch (err) {
+    console.log("BlacklistedToken sync failed:", err.message);
+  }
+
+  console.log("Server ready");
 });
 
 export default app;
