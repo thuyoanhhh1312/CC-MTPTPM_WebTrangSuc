@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { App } from 'antd';
 import {
   createContext,
@@ -8,11 +9,11 @@ import {
   useReducer,
   useRef,
 } from 'react';
-import { authApi } from '@/services/authApi';
+import { authApi, clearAuth, loadAuthFromStorage } from '@/services/authApi';
 import { registerAuthHandlers } from '@/services/apiClient';
 import { extractUserRoles } from '@/utils/roles';
 
-const AuthContext = createContext(undefined);
+export const AuthContext = createContext(undefined);
 
 const initialState = {
   status: 'initializing',
@@ -80,11 +81,12 @@ export const AuthProvider = ({ children }) => {
   }, [state.accessToken]);
 
   const forceLogout = useCallback(() => {
+    clearAuth();
     dispatch({ type: 'SIGNED_OUT' });
 
     if (!logoutToastRef.current) {
       logoutToastRef.current = true;
-      message.warning('Session expired. Please sign in again.');
+      message.warning('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.');
       setTimeout(() => {
         logoutToastRef.current = false;
       }, 1200);
@@ -120,6 +122,22 @@ export const AuthProvider = ({ children }) => {
     let mounted = true;
 
     const bootstrapAuth = async () => {
+      // 1. Restore immediately from localStorage for instant UI response
+      const stored = loadAuthFromStorage();
+      if (stored && mounted) {
+        dispatch({
+          type: 'BOOTSTRAP_AUTHENTICATED',
+          payload: { user: stored.user, accessToken: stored.accessToken },
+        });
+      }
+
+      // Không có stored auth → đánh dấu guest ngay, không cần gọi refresh
+      if (!stored) {
+        if (mounted) dispatch({ type: 'BOOTSTRAP_GUEST' });
+        return;
+      }
+
+      // 2. Attempt a silent token refresh to get a fresh accessToken
       try {
         const refreshResult = await authApi.refresh();
 
@@ -127,7 +145,7 @@ export const AuthProvider = ({ children }) => {
           throw new Error('No token from bootstrap refresh');
         }
 
-        let resolvedUser = refreshResult.user;
+        let resolvedUser = refreshResult.user ?? stored?.user;
 
         if (!resolvedUser) {
           const meResult = await authApi.me();
@@ -146,9 +164,8 @@ export const AuthProvider = ({ children }) => {
           },
         });
       } catch {
-        if (mounted) {
-          dispatch({ type: 'BOOTSTRAP_GUEST' });
-        }
+        // Refresh thất bại → giữ nguyên trạng thái đã restore từ localStorage.
+        // Lần gọi API tiếp theo sẽ trả về 401 và forceLogout sẽ dọn dẹp.
       }
     };
 

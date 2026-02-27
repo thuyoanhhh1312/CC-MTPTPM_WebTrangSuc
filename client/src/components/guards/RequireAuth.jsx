@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { Spin } from 'antd';
-import { useAuth } from '@/contexts/AuthContext';
+import useAuth from '@/hooks/useAuth';
 import { buildReturnUrl } from '@/utils/returnUrl';
 
 const RequireAuth = ({ children }) => {

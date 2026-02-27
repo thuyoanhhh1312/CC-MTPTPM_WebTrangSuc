@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useSearchParams } from 'react-router-dom';
 import { Spin } from 'antd';
-import { useAuth } from '@/contexts/AuthContext';
+import useAuth from '@/hooks/useAuth';
 import { resolveReturnUrl } from '@/utils/returnUrl';
 
 const RequireGuest = ({ children }) => {
