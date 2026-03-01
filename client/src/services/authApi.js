@@ -1,7 +1,8 @@
 import { apiClient, publicApi } from '@/services/apiClient';
-import { persistAuth, clearAuth } from '@/helpers/authStorage';
+import { clearAuth } from '@/helpers/authStorage';
 
 export { persistAuth, clearAuth, loadAuthFromStorage } from '@/helpers/authStorage';
+
 
 const toError = (error, fallbackMessage) => {
   const apiMessage = error.response?.data?.message;
@@ -12,7 +13,6 @@ export const authApi = {
   async signIn(payload) {
     try {
       const { data } = await publicApi.post('/auth/login', payload);
-      persistAuth(data);
       return data;
     } catch (error) {
       throw toError(error, 'Đăng nhập thất bại');
@@ -22,7 +22,6 @@ export const authApi = {
   async signUp(payload) {
     try {
       const { data } = await publicApi.post('/auth/register', payload);
-      persistAuth(data);
       return data;
     } catch (error) {
       throw toError(error, 'Đăng ký thất bại');
@@ -47,19 +46,13 @@ export const authApi = {
     }
   },
 
-  async refresh() {
-    const storedRefreshToken = localStorage.getItem('refreshToken');
-    if (!storedRefreshToken) {
-      throw new Error('Không có refresh token');
-    }
-
+  async refresh(refreshToken) {
     try {
       const { data } = await publicApi.post(
         '/auth/refresh-token',
-        { refreshToken: storedRefreshToken },
+        { refreshToken },
         { skipAuthRefresh: true },
       );
-      persistAuth(data);
       return data;
     } catch (error) {
       throw toError(error, 'Không thể làm mới phiên đăng nhập');
