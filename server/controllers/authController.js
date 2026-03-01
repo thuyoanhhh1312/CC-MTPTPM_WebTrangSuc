@@ -189,6 +189,16 @@ export const logout = async (req, res, next) => {
     });
   }
   try {
+    const authHeader = req.headers["authorization"];
+    const accessToken = authHeader?.split(" ")[1];
+    if (accessToken && userPayload.exp) {
+      const expiresAt = new Date(userPayload.exp * 1000);
+      await db.BlacklistedToken.create({
+        token: accessToken,
+        expires_at: expiresAt,
+      });
+    }
+
     const user = await db.User.findByPk(userPayload.id);
     if (user) {
       user.refresh_token = null;
