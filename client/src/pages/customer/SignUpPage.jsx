@@ -72,9 +72,9 @@ const SignUpPage = () => {
             rules={[{ required: true, message: 'Vui lòng chọn giới tính' }]}
           >
             <Select placeholder="Chọn giới tính">
-              <Select.Option value="male">Nam</Select.Option>
-              <Select.Option value="female">Nữ</Select.Option>
-              <Select.Option value="other">Khác</Select.Option>
+              <Select.Option value="Nam">Nam</Select.Option>
+              <Select.Option value="Nữ">Nữ</Select.Option>
+              <Select.Option value="Khác">Khác</Select.Option>
             </Select>
           </Form.Item>
 
