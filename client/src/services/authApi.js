@@ -1,44 +1,7 @@
 import { apiClient, publicApi } from '@/services/apiClient';
+import { persistAuth, clearAuth } from '@/helpers/authStorage';
 
-const useMockAuth = (import.meta.env.VITE_USE_MOCK_AUTH || 'false') === 'true';
-
-const mockUsers = [
-  {
-    id: 'u-admin',
-    name: 'Admin Operator',
-    email: 'admin@jewel.local',
-    password: 'Admin@123',
-    roles: ['admin'],
-  },
-  {
-    id: 'u-staff',
-    name: 'Staff Operator',
-    email: 'staff@jewel.local',
-    password: 'Staff@123',
-    roles: ['staff'],
-  },
-  {
-    id: 'u-customer',
-    name: 'Customer Demo',
-    email: 'customer@jewel.local',
-    password: 'Customer@123',
-    roles: ['customer'],
-  },
-];
-
-let mockRefreshSubjectId = null;
-
-const delay = (ms = 250) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const sanitizeUser = (user) => ({
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  roles: user.roles,
-  role: user.roles[0],
-});
-
-const buildToken = (user) => `mock-${user.roles[0]}-${Date.now()}`;
+export { persistAuth, clearAuth, loadAuthFromStorage } from '@/helpers/authStorage';
 
 const toError = (error, fallbackMessage) => {
   const apiMessage = error.response?.data?.message;
@@ -47,153 +10,81 @@ const toError = (error, fallbackMessage) => {
 
 export const authApi = {
   async signIn(payload) {
-    if (useMockAuth) {
-      await delay();
-
-      const user = mockUsers.find(
-        (candidate) =>
-          candidate.email.toLowerCase() === payload.email.toLowerCase() &&
-          candidate.password === payload.password,
-      );
-
-      if (!user) {
-        throw new Error('Invalid email or password');
-      }
-
-      mockRefreshSubjectId = user.id;
-      return {
-        user: sanitizeUser(user),
-        accessToken: buildToken(user),
-      };
-    }
-
     try {
-      const { data } = await publicApi.post('/auth/signin', payload);
+      const { data } = await publicApi.post('/auth/login', payload);
+      persistAuth(data);
       return data;
     } catch (error) {
-      throw toError(error, 'Unable to sign in');
+      throw toError(error, 'Đăng nhập thất bại');
     }
   },
 
   async signUp(payload) {
-    if (useMockAuth) {
-      await delay();
-      return {
-        message: `Mock signup successful for ${payload.email}`,
-      };
-    }
-
     try {
-      const { data } = await publicApi.post('/auth/signup', payload);
+      const { data } = await publicApi.post('/auth/register', payload);
+      persistAuth(data);
       return data;
     } catch (error) {
-      throw toError(error, 'Unable to sign up');
+      throw toError(error, 'Đăng ký thất bại');
     }
   },
 
   async forgotPassword(payload) {
-    if (useMockAuth) {
-      await delay();
-      return {
-        message: `Password reset instructions sent to ${payload.email}`,
-      };
-    }
-
     try {
       const { data } = await publicApi.post('/auth/forgot-password', payload);
       return data;
     } catch (error) {
-      throw toError(error, 'Unable to request password reset');
+      throw toError(error, 'Không thể yêu cầu đặt lại mật khẩu');
     }
   },
 
   async resetPassword(payload) {
-    if (useMockAuth) {
-      await delay();
-      return {
-        message: 'Password updated successfully',
-      };
-    }
-
     try {
       const { data } = await publicApi.post('/auth/reset-password', payload);
       return data;
     } catch (error) {
-      throw toError(error, 'Unable to reset password');
+      throw toError(error, 'Không thể đặt lại mật khẩu');
     }
   },
 
   async refresh() {
-    if (useMockAuth) {
-      await delay(180);
-
-      if (!mockRefreshSubjectId) {
-        throw new Error('No active refresh session');
-      }
-
-      const user = mockUsers.find((candidate) => candidate.id === mockRefreshSubjectId);
-
-      if (!user) {
-        throw new Error('Session not found');
-      }
-
-      return {
-        user: sanitizeUser(user),
-        accessToken: buildToken(user),
-      };
+    const storedRefreshToken = localStorage.getItem('refreshToken');
+    if (!storedRefreshToken) {
+      throw new Error('Không có refresh token');
     }
 
     try {
-      const { data } = await publicApi.post('/auth/refresh', null, {
-        skipAuthRefresh: true,
-      });
+      const { data } = await publicApi.post(
+        '/auth/refresh-token',
+        { refreshToken: storedRefreshToken },
+        { skipAuthRefresh: true },
+      );
+      persistAuth(data);
       return data;
     } catch (error) {
-      throw toError(error, 'Unable to refresh session');
+      throw toError(error, 'Không thể làm mới phiên đăng nhập');
     }
   },
 
   async me() {
-    if (useMockAuth) {
-      await delay(120);
-
-      if (!mockRefreshSubjectId) {
-        throw new Error('No active session');
-      }
-
-      const user = mockUsers.find((candidate) => candidate.id === mockRefreshSubjectId);
-
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      return {
-        user: sanitizeUser(user),
-      };
-    }
-
     try {
-      const { data } = await apiClient.get('/auth/me');
+      const { data } = await apiClient.get('/auth/current-user');
       return data;
     } catch (error) {
-      throw toError(error, 'Unable to load profile');
+      throw toError(error, 'Không thể tải thông tin người dùng');
     }
   },
 
   async signOut() {
-    if (useMockAuth) {
-      await delay(100);
-      mockRefreshSubjectId = null;
-      return { message: 'Signed out' };
-    }
-
     try {
-      const { data } = await publicApi.post('/auth/signout', null, {
+      const { data } = await apiClient.post('/auth/logout', null, {
         skipAuthRefresh: true,
       });
+      clearAuth();
       return data;
     } catch {
-      return { message: 'Signed out locally' };
+      clearAuth();
+      return { message: 'Đã đăng xuất' };
     }
   },
 };

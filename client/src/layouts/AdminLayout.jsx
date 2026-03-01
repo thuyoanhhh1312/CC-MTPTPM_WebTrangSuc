@@ -14,7 +14,7 @@ import {
 import { LogOut, Menu as MenuIcon, UserCircle2 } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { adminNavItems } from '@/config/navigation';
-import { useAuth } from '@/contexts/AuthContext';
+import useAuth from '@/hooks/useAuth';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const { Header, Sider, Content } = Layout;

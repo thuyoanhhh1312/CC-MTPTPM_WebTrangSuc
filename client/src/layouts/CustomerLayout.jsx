@@ -11,7 +11,7 @@ import {
 import { Gem, LogOut, Menu as MenuIcon, ShoppingBag, UserRound } from 'lucide-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { customerNavItems } from '@/config/navigation';
-import { useAuth } from '@/contexts/AuthContext';
+import useAuth from '@/hooks/useAuth';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 const { Header, Content, Footer } = Layout;

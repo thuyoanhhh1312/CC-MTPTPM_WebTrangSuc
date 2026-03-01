@@ -1,6 +1,6 @@
 import { Button, Card, Form, Input, Space, Tag, Typography } from 'antd';
 import PageContainer from '@/components/common/PageContainer';
-import { useAuth } from '@/contexts/AuthContext';
+import useAuth from '@/hooks/useAuth';
 
 const { Text } = Typography;
 
