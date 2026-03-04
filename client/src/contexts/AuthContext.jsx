@@ -9,7 +9,8 @@ import {
   useReducer,
   useRef,
 } from 'react';
-import { authApi, clearAuth, loadAuthFromStorage } from '@/services/authApi';
+import { authApi, clearAuth, loadAuthFromStorage, persistAuth } from '@/services/authApi';
+import { getRefreshToken } from '@/helpers/authStorage';
 import { registerAuthHandlers } from '@/services/apiClient';
 import { extractUserRoles } from '@/utils/roles';
 
@@ -94,11 +95,17 @@ export const AuthProvider = ({ children }) => {
   }, [message]);
 
   const refreshAccessToken = useCallback(async () => {
-    const result = await authApi.refresh();
+    const result = await authApi.refresh(getRefreshToken());
 
     if (!result?.accessToken) {
       throw new Error('Missing access token from refresh endpoint');
     }
+
+    persistAuth({
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
+      user: result.user,
+    });
 
     dispatch({ type: 'TOKEN_REFRESHED', payload: result.accessToken });
 
@@ -139,7 +146,7 @@ export const AuthProvider = ({ children }) => {
 
       // 2. Attempt a silent token refresh to get a fresh accessToken
       try {
-        const refreshResult = await authApi.refresh();
+        const refreshResult = await authApi.refresh(stored.refreshToken);
 
         if (!refreshResult?.accessToken) {
           throw new Error('No token from bootstrap refresh');
@@ -155,6 +162,12 @@ export const AuthProvider = ({ children }) => {
         if (!mounted || !resolvedUser) {
           return;
         }
+
+        persistAuth({
+          accessToken: refreshResult.accessToken,
+          refreshToken: refreshResult.refreshToken,
+          user: resolvedUser,
+        });
 
         dispatch({
           type: 'BOOTSTRAP_AUTHENTICATED',
@@ -178,6 +191,12 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = useCallback(async (payload) => {
     const result = await authApi.signIn(payload);
+
+    persistAuth({
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
+      user: result.user,
+    });
 
     dispatch({
       type: 'SIGNED_IN',
