@@ -70,9 +70,9 @@ app.listen(port, async () => {
       await db.BlacklistedToken.sync();
       console.log("BlacklistedToken table synced");
 
-      // Start token cleanup scheduler
-      const { scheduleTokenCleanup } = await import("./utils/tokenCleanup.js");
-      scheduleTokenCleanup();
+      // Start token cleanup job (runs daily at 23:59)
+      const { startTokenCleanupJob } = await import("./jobs/tokenCleanupJob.js");
+      startTokenCleanupJob();
     }
   } catch (err) {
     console.log("BlacklistedToken sync failed:", err.message);
