@@ -29,6 +29,7 @@ export const register = async (req, res, next) => {
   }
   let t;
   try {
+    // Check email exists
     const existingUser = await db.User.findOne({ where: { email } });
     if (existingUser) {
       return next({
@@ -37,6 +38,17 @@ export const register = async (req, res, next) => {
         message: "Email đã tồn tại",
       });
     }
+
+    // Check phone exists
+    const existingPhone = await db.Customer.findOne({ where: { phone } });
+    if (existingPhone) {
+      return next({
+        statusCode: 409,
+        code: ERROR_CODES.VALIDATION_ERROR,
+        message: "Số điện thoại đã được sử dụng",
+      });
+    }
+
     t = await db.sequelize.transaction();
     const salt = await bcrypt.genSalt(12);
     const hashedPassword = await bcrypt.hash(password, salt);
